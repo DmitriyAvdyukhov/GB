@@ -29,7 +29,7 @@ namespace tic_tac_toe
 			}
 			if (i % 2 != 0)
 			{
-				cout << "Player1 enter coordinates line x and column  from 1 to 3" << endl;
+				cout << "Player1 enter coordinates line is first number and column is second number from 1 to 3" << endl;
 				t.StepGame(player1);
 				if (t.GetWiner())
 				{
@@ -39,7 +39,7 @@ namespace tic_tac_toe
 			}
 			else
 			{
-				cout << "Player2  enter coordinates line x and column  from 1 to 3" << endl;
+				cout << "Player2 enter coordinates line is first number and column is second number from 1 to 3" << endl;
 				t.StepGame(player2);
 				if (t.GetWiner())
 				{
@@ -50,7 +50,7 @@ namespace tic_tac_toe
 		}
 		if (t.GetWiner())
 		{
-			cout << "The game isn't hawe a' winer" << endl;
+			cout << "The game isn't have a winer" << endl;
 		}
 
 	}
@@ -79,12 +79,12 @@ namespace tic_tac_toe
 		}
 		else if ((game_[x][y] != Elements::EMPTY && x > 0 && x < 3 && y > 0 && y < 3))
 		{
-			cout << "You inputed incorrect coordinats. Place is busy. Try again" << endl;
+			cout << "You inputed incorrect coordinates. Place is busy. Try again" << endl;
 			return CreatePoint();
 		}
 		else
 		{
-			cout << "You inputed incorrect coordinats. Try again" << endl;
+			cout << "You inputed incorrect coordinates. Try again" << endl;
 			return CreatePoint();
 		}
 
