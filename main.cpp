@@ -1,6 +1,7 @@
 #include <iostream>
 #include "tic_tac_toe.h"
 #include"dz2.h"
+#include "dz4.h"
 
 using namespace std;
 
@@ -56,6 +57,22 @@ int main(int argc, char* argv[])
 			cout << a * (b + (c / static_cast<double>(d))) << endl;
 		}
 
+	}
+
+	//------dz4-----------------------
+	{
+		//task 1
+		CheckSum();
+		//task 2
+		CheckDec();
+		//task 3P
+		PrintOddNumbers();
+		//task 4
+		CheckNaturalNumber();
+		//task 5
+		PrintCheckYear();		
+
+		PrintDiagonal();		
 	}
 	return 0;
 }
