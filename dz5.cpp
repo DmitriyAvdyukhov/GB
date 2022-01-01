@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 	
 	int ar2 [] = { 10, 1, 2, 3, 4 };
 	Print(ar2, 5);
-	std::cout<<std::boolalpha<<IsBalance(ar2, 5) <<std::endl;
+	std::cout << std::boolalpha << IsBalance(ar2, 5) << std::endl;
 
 	return 0;
 }
