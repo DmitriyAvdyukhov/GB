@@ -7,7 +7,7 @@
 using namespace std;
 
 template<typename T>
-void Print(T ar[], const size_t size)
+void PrintArray(T ar[], const size_t size)
 {
 	for (size_t i = 0; i < size; ++i)
 	{
@@ -33,19 +33,16 @@ void AddValueInArray(int ar[], const size_t size)
 	}
 }
 
-void CreateArrayAndPrint()
+void Task1()
 {
 	size_t size = 0;
 	cin >> size;
 	int* ar = new int[size];
-	AddValueInArray(ar, size);
-	Print(ar, size);
-	delete [] ar;
-}
 
-void Task1()
-{
-	CreateArrayAndPrint();
+	AddValueInArray(ar, size);
+	PrintArray(ar, size);
+
+	delete[] ar;
 }
 
 int** CreateMatrix()
@@ -76,7 +73,7 @@ void PrintMatrix(int* matrix[], const size_t size)
 {
 	for (size_t i = 0; i < size; i++)
 	{
-		Print(matrix[1], size);
+		PrintArray(matrix[1], size);
 	}
 }
 
@@ -86,6 +83,7 @@ void DeleteMatrix(int* matrix[], const size_t size)
 	{
 		delete [] matrix[i];
 	}	
+	delete[] matrix;
 }
 
 void Task2()
@@ -102,9 +100,9 @@ string CreateFile()
 	cout << "Enter name your file" << endl;
 	string name;
 	cin >> name;
-	ofstream of(name + ".txt");
+	ofstream of(name);
 	
-	return name + ".txt";
+	return name;
 }
 
 void AddValueInFile(const string& name)
@@ -116,11 +114,11 @@ void AddValueInFile(const string& name)
 		cout << "Please enter your value of string" << endl;
 		cin >> ws;
 		getline(cin, value);
-		of << value;
+		of << value << endl;
 	}
 }
 
-void AddConntent(ofstream& out, string name_file)
+void AddConntent(ofstream& out, const string& name_file)
 {
 	ifstream in(name_file);
 	if(in)
@@ -134,6 +132,7 @@ void AddConntent(ofstream& out, string name_file)
 		}
 	}
 }
+
 void MergeFiles(const string& merge, const string& name1, const string& name2)
 {
 	ofstream out(merge, ios::app);
@@ -146,7 +145,7 @@ void MergeFiles(const string& merge, const string& name1, const string& name2)
 
 }
 
-void PrintFile(string name_file)
+void PrintFile(const string& name_file)
 {
 	ifstream in(name_file);
 	if (in)
@@ -156,15 +155,16 @@ void PrintFile(string name_file)
 			string temp;
 			in >> ws;
 			getline(in, temp);
-			cout << temp << endl;
+			if (temp.length())
+			{
+				cout << temp << endl;
+			}
 		}
 	}
 }
 
-bool CheckWord(const string& name_file)
-{
-	string check;
-	cin >> check;
+bool CheckWord(const string& word, const string& name_file)
+{	
 	ifstream in(name_file);
 	if (in)
 	{
@@ -173,7 +173,7 @@ bool CheckWord(const string& name_file)
 			in >> ws;
 			string temp;
 			getline(in, temp);
-			if (temp.find(check) != string::npos)
+			if (temp.find(word) != string::npos)
 			{
 				return true;
 			}
@@ -182,7 +182,7 @@ bool CheckWord(const string& name_file)
 	return false;
 }
 
-void Task3_4_5()
+void Task3_4()
 {
 	string name_file_1 = CreateFile();
 	AddValueInFile(name_file_1);
@@ -194,17 +194,24 @@ void Task3_4_5()
 
 	string merge = CreateFile();
 	MergeFiles(merge, name_file_1, name_file_2);
-	PrintFile(merge);
-	cout << boolalpha << CheckWord(merge) << endl;
+	PrintFile(merge);	
 }
 
-
+void Task5()
+{
+	string word;
+	cin >> word;
+	string name_file;
+	cin >> name_file;
+	cout << boolalpha << CheckWord(word, name_file) << endl;
+}
 
 int main() {
 
 	Task1();
 	Task2();
-	Task3_4_5();
-	
+	Task3_4();
+	Task5();
+
 	return 0;
 }
