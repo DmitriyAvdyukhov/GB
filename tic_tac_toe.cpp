@@ -1,71 +1,19 @@
 #include "tic_tac_toe.h"
+
 using namespace std;
-
-
- int a = 5;
- int b = 3;
- int c = 8;
- int d = 7;
 
 namespace tic_tac_toe
 {
-	void GameStart()
+	TicTacToe::TicTacToe(const Players& players)
+		: players_(players)
 	{
-		TicTacToe t;
-		Elements player1 = Elements::CROSS;
-		Elements player2 = Elements::ZERO;
-		bool first_step = true;
-		for (int i = 1; i < 10; ++i)
+		for (size_t i = 0; i < SIZE; ++i)
 		{
-			Line x = 0;
-			Column y = 0;
-			if (first_step)
+			for (size_t j = 0; j < SIZE; ++j)
 			{
-				cout << "This is place for the game\n";
-				t.PrintGame();
-				cout << "Player1 plays with a cross\n";
-				cout << "Player2 plays with a zero\n" << endl;
-				first_step = false;
-			}
-			if (i % 2 != 0)
-			{
-				cout << "Player1 enter coordinates line is first number and column is second number from 1 to 3" << endl;
-				t.StepGame(player1);
-				if (t.GetWiner())
-				{
-					cout << "Player1 are winer" << endl;
-					break;
-				}
-			}
-			else
-			{
-				cout << "Player2 enter coordinates line is first number and column is second number from 1 to 3" << endl;
-				t.StepGame(player2);
-				if (t.GetWiner())
-				{
-					cout << "Player2 are winer" << endl;
-					break;
-				}
+				game_[i][j] = Elements::EMPTY;
 			}
 		}
-		if (t.GetWiner())
-		{
-			cout << "The game isn't have a winer" << endl;
-		}
-
-	}
-
-	TicTacToe::TicTacToe()
-	{
-		game_[0][0] = Elements::EMPTY;
-		game_[0][1] = Elements::EMPTY;
-		game_[0][2] = Elements::EMPTY;
-		game_[1][0] = Elements::EMPTY;
-		game_[1][1] = Elements::EMPTY;
-		game_[1][2] = Elements::EMPTY;
-		game_[2][0] = Elements::EMPTY;
-		game_[2][1] = Elements::EMPTY;
-		game_[2][2] = Elements::EMPTY;
 	}
 
 	Point TicTacToe::CreatePoint() const
@@ -73,29 +21,29 @@ namespace tic_tac_toe
 		Line x = 0;
 		Column y = 0;
 		cin >> x >> y;
-		if ((game_[x][y] == Elements::EMPTY && x > 0 && x < 3 && y > 0 && y < 3))
+		if ((game_[x - 1][y - 1] == Elements::EMPTY && x > 0 && x < 4 && y > 0 && y < 4))
 		{
-			return { x , y };
+			return { x - 1 , y - 1 };
 		}
-		else if ((game_[x][y] != Elements::EMPTY && x > 0 && x < 3 && y > 0 && y < 3))
+		else if ((game_[x - 1][y - 1] != Elements::EMPTY && x > 0 && x < 4 && y > 0 && y < 4))
 		{
-			cout << "You inputed incorrect coordinates. Place is busy. Try again" << endl;
+			cout << "You inputed incorrect coordinats. Place is busy. Try again"s << endl;
 			return CreatePoint();
 		}
 		else
 		{
-			cout << "You inputed incorrect coordinates. Try again" << endl;
+			cout << "You inputed incorrect coordinats. Try again"s << endl;
 			return CreatePoint();
 		}
 
 	}
 
-	void TicTacToe::AddElement(const Point& p, Elements el)
+	void TicTacToe::AddElement(const Point& p, const Elements& el)
 	{
 		game_[p.x][p.y] = el;
 	}
 
-	bool TicTacToe::Win(Elements el) const
+	bool TicTacToe::Win(const Elements& el) const
 	{
 		return
 			((game_[0][0] == el && game_[0][1] == el
@@ -118,19 +66,19 @@ namespace tic_tac_toe
 
 	void TicTacToe::PrintGame() const
 	{
-		cout << "\t   0   1   2\n" << endl;
-		cout << "\t0  " << (char)game_[0][0] << " | "
+		cout << "\t   1   2   3\n"s << endl;
+		cout << "\t1  "s << (char)game_[0][0] << " | "s
 			<< (char)game_[0][1] << " | " << (char)game_[0][2] << endl;
+		cout << "\t  -----------"s << endl;
+		cout << "\t2  "s << (char)game_[1][0] << " | "s
+			<< (char)game_[1][1] << " | "s << (char)game_[1][2] << endl;
 		cout << "\t  -----------" << endl;
-		cout << "\t1  " << (char)game_[1][0] << " | "
-			<< (char)game_[1][1] << " | " << (char)game_[1][2] << endl;
-		cout << "\t  -----------" << endl;
-		cout << "\t2  " << (char)game_[2][0] << " | "
-			<< (char)game_[2][1] << " | " << (char)game_[2][2] << endl;
+		cout << "\t3  "s << (char)game_[2][0] << " | "s
+			<< (char)game_[2][1] << " | "s << (char)game_[2][2] << endl;
 		cout << endl;
 	}
 
-	void TicTacToe::StepGame(Elements el)
+	void TicTacToe::StepGame(const Elements& el)
 	{
 		AddElement(CreatePoint(), el);
 		PrintGame();
@@ -144,6 +92,228 @@ namespace tic_tac_toe
 	bool TicTacToe::GetWiner() const
 	{
 		return is_winer_;
+	}
+
+	Players TicTacToe::GetPlayers() const
+	{
+		return players_;
+	}
+
+	TicTacToe::TicTacToe()
+	{
+		for (size_t i = 0; i < SIZE; ++i)
+		{
+			for (size_t j = 0; j < SIZE; ++j)
+			{
+				game_[i][j] = Elements::EMPTY;
+			}
+		}
+	}
+
+	bool TicTacToe::Process(const std::string& name, const Elements& player)
+	{
+		cout << name << " enter coordinates line x and column  from 1 to 3"s << endl;
+		StepGame(player);
+		if (GetWiner())
+		{
+			cout << name << " are winer"s << endl;			
+		}
+		return GetWiner();
+	}
+
+	void TicTacToeVsHumen::GameStart()		
+	{		
+		Elements player1 = Elements::CROSS;
+		Elements player2 = Elements::ZERO;
+		bool first_step = true;
+		std::unique_ptr<std::string>name1 = std::make_unique<std::string>(GetPlayers().player1);
+		std::unique_ptr<std::string>name2 = std::make_unique<std::string>(GetPlayers().player2);
+		for (int i = 1; i < 10; ++i)
+		{			
+			if (first_step)
+			{
+				cout << "This is place for the game\n"s;
+				PrintGame();
+				cout << *name1 << " plays with a cross\n"s;
+				cout << *name2 << " plays with a zero\n"s;
+				first_step = false;
+			}
+			if (i % 2 != 0)
+			{
+				if (Process(*name1, player1))
+				{
+					break;
+				}				
+			}
+			else
+			{
+				if (Process(*name2, player2))
+				{
+					break;
+				}				
+			}
+		}
+		if (!GetWiner())
+		{
+			cout << "The game isn't hawe a' winer"s << endl;
+		}
+
+	}
+
+	TicTacToeVsHumen::TicTacToeVsHumen(const Players& players)
+		: TicTacToe(players)
+	{}
+
+	TicTacToeVsComputer::TicTacToeVsComputer(const Players& players)
+		: TicTacToe(players)
+	{}
+
+	Point TicTacToeVsComputer::CreatePointAi()
+	{
+		for (size_t i = 0; i < SIZE; ++i)
+		{
+			for (size_t j = 0; j < SIZE; ++j)
+			{
+				if (game_[i][j] == Elements::EMPTY)
+				{
+					game_[i][j] = Elements::ZERO;
+					if (Win(Elements::ZERO))
+					{
+						game_[i][j] = Elements::EMPTY;
+						return { i, j };
+					}
+					game_[i][j] = Elements::EMPTY;
+				}
+				
+				if (game_[i][j] == Elements::EMPTY)
+				{
+					game_[i][j] = Elements::CROSS;
+					if (Win(Elements::CROSS))
+					{
+						game_[i][j] = Elements::EMPTY;
+						return { i, j };
+					}
+					game_[i][j] = Elements::EMPTY;
+				}				
+			}
+		}
+
+		if (game_[1][1] == Elements::EMPTY)
+		{
+			return { 1, 1 };
+		}
+		Point buf[4];
+		size_t count = 0;
+		if (game_[0][2] == Elements::EMPTY)
+		{
+			buf[count] = { 0, 2 };
+			++count;
+		}
+		if (game_[2][0] == Elements::EMPTY)
+		{
+			buf[count] = { 2, 0 };
+			++count;
+		}
+		if (game_[2][2] == Elements::EMPTY)
+		{
+			buf[count] = { 2, 2 };
+			++count;
+		}
+		if (game_[0][0] == Elements::EMPTY)
+		{
+			buf[count] = { 0, 0 };
+			++count;
+		}
+		if (count > 0)
+		{
+			const size_t index = rand() % count;
+			return buf[index];
+		}
+		if (game_[0][1] == Elements::EMPTY)
+		{
+			buf[count] = { 0, 1 };
+			++count;
+		}
+		if (game_[1][0] == Elements::EMPTY)
+		{
+			buf[count] = { 1, 00 };
+			++count;
+		}
+		if (game_[0][2] == Elements::EMPTY)
+		{
+			buf[count] = { 1, 2 };
+			++count;
+		}
+		if (game_[0][2] == Elements::EMPTY)
+		{
+			buf[count] = { 2, 1 };
+			++count;
+		}
+		if (count > 0)
+		{
+			const size_t index = rand() % count;
+			return buf[index];
+		}
+	}
+
+	void TicTacToeVsComputer::StepGameAi(const Elements & el)
+	{
+		AddElement(CreatePointAi(), el);
+		PrintGame();
+		if (Win(el))
+
+		{
+			is_winer_ = true;
+		}
+	}
+
+	bool TicTacToeVsComputer::ProcessAi(const std::string& name, const Elements & player)
+	{
+		cout << name << " is going now"s << endl;
+		StepGameAi(player);
+		if (GetWiner())
+		{
+			cout << name << " are winer"s << endl;
+		}
+		return GetWiner();
+	}
+
+	void TicTacToeVsComputer::GameStart()
+	{
+		Elements player1 = Elements::CROSS;
+		Elements player2 = Elements::ZERO;
+		bool first_step = true;
+		std::unique_ptr<std::string>name1 = std::make_unique<std::string>(GetPlayers().player1);
+		std::unique_ptr<std::string>name2 = std::make_unique<std::string>(GetPlayers().player2);
+		for (int i = 1; i < 10; ++i)
+		{						
+			if (first_step)
+			{
+				cout << "This is place for the game\n"s;
+				PrintGame();
+				cout << *name1 << " plays with a cross\n"s;
+				cout << *name2 << " plays with a zero\n"s;
+				first_step = false;
+			}
+			if (i % 2 != 0)
+			{
+				if (Process(*name1, player1))
+				{
+					break;
+				}
+			}
+			else
+			{
+				if (ProcessAi(*name2, player2))
+				{
+					break;
+				}
+			}
+		}
+		if (!GetWiner())
+		{
+			cout << "The game isn't hawe a' winer"s << endl;
+		}
 	}
 
 }

@@ -1,6 +1,10 @@
 #pragma once
 #include <iostream>
 
+#define SIZE 3
+
+using namespace std::literals; 
+
 namespace tic_tac_toe
 {
 	enum class Elements
@@ -10,8 +14,8 @@ namespace tic_tac_toe
 		ZERO = '0'
 	};
 
-	using Line = int;
-	using Column = int;
+	using Line = size_t;
+	using Column = size_t;
 
 	struct Point
 	{
@@ -19,27 +23,62 @@ namespace tic_tac_toe
 		Column y = 0;
 	};
 
+	struct Players
+	{
+		std::string player1 = "Playr 1"s;
+		std::string player2 = "Ai"s;
+	};
+
 	class TicTacToe
 	{
 	public:
-		TicTacToe();
+		TicTacToe();		
+
+		explicit TicTacToe(const Players& players);
 
 		Point CreatePoint()const;
 
-		void AddElement(const Point& p, Elements el);
+		void AddElement(const Point& p, const Elements& el);
 
-		bool Win(Elements el)const;
+		bool Win(const Elements& el)const;
 
 		void PrintGame()const;
 
-		void StepGame(Elements el);
+		void StepGame(const Elements& el);
 
 		bool GetWiner()const;
 
-	private:
+		Players GetPlayers() const;
+
+		bool Process(const std::string& name, const Elements& player);	
+		
+	protected:
 		bool is_winer_ = false;
-		Elements game_[3][3];
+		Players players_;
+		Elements game_[SIZE][SIZE];
 	};
 
-	void GameStart();
+	class TicTacToeVsHumen : public TicTacToe
+	{
+	public:
+		TicTacToeVsHumen(const Players& players);		
+
+		void GameStart();
+	};
+
+	class TicTacToeVsComputer : public TicTacToe
+	{
+	public:
+		TicTacToeVsComputer(const Players& players);
+
+		Point CreatePointAi();		
+
+		void StepGameAi(const Elements& el);		
+
+		bool ProcessAi(const std::string& name, const Elements& player);
+		
+		void GameStart();
+	};
+
+	
 }
