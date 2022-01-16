@@ -16,7 +16,7 @@ int main() {
 		std::cin >> players.player2;
 		std::unique_ptr<tic_tac_toe::TicTacToeVsHumen> t 
 			= std::make_unique<tic_tac_toe::TicTacToeVsHumen>(players);
-		t->GameStart();
+		t->GameStartWithHuman();
 	}
 	else if (comand == "Ai")
 	{
@@ -25,7 +25,7 @@ int main() {
 		std::cin >> players.player1;
 		std::unique_ptr<tic_tac_toe::TicTacToeVsComputer> t 
 			= std::make_unique<tic_tac_toe::TicTacToeVsComputer>(players);
-		t->GameStart();
+		t->GameStartWithAi();
 	}
 	return 0;
 }

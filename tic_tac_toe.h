@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <memory>
+#include <functional>
 
 #define SIZE 3
 
@@ -50,7 +52,9 @@ namespace tic_tac_toe
 
 		Players GetPlayers() const;
 
-		bool Process(const std::string& name, const Elements& player);	
+		bool Process(const std::string& name, const Elements& player);			
+		
+		void GameStart(std::function<bool()> func);
 		
 	protected:
 		bool is_winer_ = false;
@@ -63,7 +67,7 @@ namespace tic_tac_toe
 	public:
 		TicTacToeVsHumen(const Players& players);		
 
-		void GameStart();
+		void GameStartWithHuman();
 	};
 
 	class TicTacToeVsComputer : public TicTacToe
@@ -71,14 +75,13 @@ namespace tic_tac_toe
 	public:
 		TicTacToeVsComputer(const Players& players);
 
-		Point CreatePointAi();		
+		Point CreatePointAi();
 
 		void StepGameAi(const Elements& el);		
 
 		bool ProcessAi(const std::string& name, const Elements& player);
 		
-		void GameStart();
-	};
-
+		void GameStartWithAi();
+	};	
 	
 }

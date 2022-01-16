@@ -121,21 +121,21 @@ namespace tic_tac_toe
 		return GetWiner();
 	}
 
-	void TicTacToeVsHumen::GameStart()		
-	{		
+	void TicTacToe::GameStart(std::function<bool()> func)
+	{
 		Elements player1 = Elements::CROSS;
 		Elements player2 = Elements::ZERO;
 		bool first_step = true;
 		std::unique_ptr<std::string>name1 = std::make_unique<std::string>(GetPlayers().player1);
 		std::unique_ptr<std::string>name2 = std::make_unique<std::string>(GetPlayers().player2);
 		for (int i = 1; i < 10; ++i)
-		{			
+		{
 			if (first_step)
 			{
-				cout << "This is place for the game\n"s;
+				std::cout << "This is place for the game\n"s;
 				PrintGame();
-				cout << *name1 << " plays with a cross\n"s;
-				cout << *name2 << " plays with a zero\n"s;
+				std::cout << *name1 << " plays with a cross\n"s;
+				std::cout << *name2 << " plays with a zero\n"s;
 				first_step = false;
 			}
 			if (i % 2 != 0)
@@ -143,21 +143,27 @@ namespace tic_tac_toe
 				if (Process(*name1, player1))
 				{
 					break;
-				}				
+				}
 			}
 			else
 			{
-				if (Process(*name2, player2))
+				if (func())
 				{
 					break;
-				}				
+				}
 			}
 		}
 		if (!GetWiner())
 		{
-			cout << "The game isn't hawe a' winer"s << endl;
+			std::cout << "The game isn't hawe a' winer"s << std::endl;
 		}
+	}
 
+	void TicTacToeVsHumen::GameStartWithHuman()		
+	{
+		std::function<bool()> func = [&]() {return Process(players_.player2, Elements::ZERO); };
+
+		GameStart(func);
 	}
 
 	TicTacToeVsHumen::TicTacToeVsHumen(const Players& players)
@@ -254,6 +260,7 @@ namespace tic_tac_toe
 			const size_t index = rand() % count;
 			return buf[index];
 		}
+		return { 0, 0 };
 	}
 
 	void TicTacToeVsComputer::StepGameAi(const Elements & el)
@@ -267,7 +274,7 @@ namespace tic_tac_toe
 		}
 	}
 
-	bool TicTacToeVsComputer::ProcessAi(const std::string& name, const Elements & player)
+	bool TicTacToeVsComputer::ProcessAi(const std::string& name, const Elements& player)
 	{
 		cout << name << " is going now"s << endl;
 		StepGameAi(player);
@@ -278,42 +285,10 @@ namespace tic_tac_toe
 		return GetWiner();
 	}
 
-	void TicTacToeVsComputer::GameStart()
+	void TicTacToeVsComputer::GameStartWithAi()
 	{
-		Elements player1 = Elements::CROSS;
-		Elements player2 = Elements::ZERO;
-		bool first_step = true;
-		std::unique_ptr<std::string>name1 = std::make_unique<std::string>(GetPlayers().player1);
-		std::unique_ptr<std::string>name2 = std::make_unique<std::string>(GetPlayers().player2);
-		for (int i = 1; i < 10; ++i)
-		{						
-			if (first_step)
-			{
-				cout << "This is place for the game\n"s;
-				PrintGame();
-				cout << *name1 << " plays with a cross\n"s;
-				cout << *name2 << " plays with a zero\n"s;
-				first_step = false;
-			}
-			if (i % 2 != 0)
-			{
-				if (Process(*name1, player1))
-				{
-					break;
-				}
-			}
-			else
-			{
-				if (ProcessAi(*name2, player2))
-				{
-					break;
-				}
-			}
-		}
-		if (!GetWiner())
-		{
-			cout << "The game isn't hawe a' winer"s << endl;
-		}
-	}
+		std::function<bool()> func = [&]() {return ProcessAi(players_.player2, Elements::ZERO); };
 
+		GameStart(func);
+	}	
 }
